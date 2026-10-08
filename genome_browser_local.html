@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Browse the Silphium reference genome and gene annotations supplied in the local data folder.">
+	<title>Silphium Genome Browser | Silphium Base</title>
+	<link rel="preconnect" href="https://cdn.jsdelivr.net">
+	<style>
+		:root {
+			color-scheme: light;
+			--forest: #183d32;
+			--forest-deep: #102c25;
+			--leaf: #426c50;
+			--citron: #e4ed8a;
+			--paper: #f3f5ef;
+			--ink: #1c342d;
+			--muted: #63736b;
+			--rule: #d9e0d8;
+		}
+
+		* { box-sizing: border-box; }
+
+		body {
+			margin: 0;
+			background: var(--paper);
+			color: var(--ink);
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+			font-size: 15px;
+			line-height: 1.55;
+		}
+
+		a { color: var(--leaf); }
+		a:focus-visible, button:focus-visible, input:focus-visible {
+			outline: 3px solid #9cab35;
+			outline-offset: 3px;
+		}
+
+		.site-bar {
+			min-height: 54px;
+			padding: 0 max(24px, calc((100vw - 1240px) / 2));
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 16px;
+			background: var(--forest-deep);
+			color: #fff;
+		}
+
+		.site-name {
+			color: inherit;
+			font-size: 13px;
+			font-weight: 700;
+			text-decoration: none;
+		}
+
+		.site-home {
+			align-self: stretch;
+			padding: 0 16px;
+			display: inline-flex;
+			align-items: center;
+			border-bottom: 3px solid var(--citron);
+			color: #fff;
+			font-size: 13px;
+			font-weight: 600;
+			text-decoration: none;
+		}
+
+		.site-home:hover {
+			background: rgba(255, 255, 255, 0.08);
+		}
+
+		main {
+			width: min(1240px, calc(100% - 48px));
+			margin: 0 auto;
+			padding: 48px 0 64px;
+		}
+
+		.page-heading {
+			max-width: 850px;
+			margin-bottom: 28px;
+		}
+
+		.eyebrow {
+			margin: 0 0 9px;
+			color: var(--leaf);
+			font-size: 12px;
+			font-weight: 700;
+			text-transform: uppercase;
+		}
+
+		h1, h2 {
+			margin: 0;
+			color: var(--forest);
+			font-family: Georgia, "Times New Roman", serif;
+			font-weight: 400;
+			line-height: 1.16;
+		}
+
+		h1 { font-size: 42px; }
+
+		.page-heading p:last-child {
+			max-width: 770px;
+			margin: 12px 0 0;
+			color: var(--muted);
+			font-size: 16px;
+		}
+
+		.data-notice {
+			margin: 0 0 22px;
+			padding: 13px 16px;
+			border-left: 4px solid #b5c947;
+			background: #edf1d5;
+			color: #394a30;
+			font-size: 14px;
+		}
+
+		.data-notice strong { color: #263a2b; }
+
+		.browser-tools {
+			margin-bottom: 12px;
+			display: flex;
+			align-items: end;
+			justify-content: space-between;
+			gap: 20px;
+		}
+
+		.browser-tools h2 { font-size: 25px; }
+
+		.locus-form {
+			display: flex;
+			align-items: end;
+			gap: 8px;
+		}
+
+		.locus-field label {
+			display: block;
+			margin-bottom: 4px;
+			color: var(--muted);
+			font-size: 12px;
+			font-weight: 600;
+		}
+
+		.locus-field input {
+			width: 260px;
+			min-height: 40px;
+			padding: 8px 10px;
+			border: 1px solid #b8c5bb;
+			border-radius: 3px;
+			background: #fff;
+			color: var(--ink);
+			font: inherit;
+		}
+
+		.locus-form button {
+			min-height: 40px;
+			padding: 0 16px;
+			border: 1px solid var(--forest);
+			border-radius: 3px;
+			background: var(--forest);
+			color: #fff;
+			font: inherit;
+			font-weight: 600;
+			cursor: pointer;
+		}
+
+		.locus-form button:hover { background: var(--forest-deep); }
+
+		.browser-shell {
+			min-height: 610px;
+			border: 1px solid var(--rule);
+			background: #fff;
+		}
+
+		#igv-browser { min-height: 610px; }
+
+		#browser-status {
+			margin: 0;
+			padding: 10px 14px;
+			border-top: 1px solid var(--rule);
+			color: var(--muted);
+			font-size: 13px;
+		}
+
+		#browser-status[data-state="error"] {
+			background: #fff0ed;
+			color: #8e3225;
+		}
+
+		.data-sources {
+			margin-top: 18px;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px 20px;
+			color: var(--muted);
+			font-size: 13px;
+		}
+
+		.data-sources a { font-weight: 600; }
+
+		@media (max-width: 700px) {
+			.site-bar { padding: 0 18px; }
+			main { width: calc(100% - 36px); padding: 34px 0 46px; }
+			h1 { font-size: 34px; }
+			.page-heading p:last-child { font-size: 15px; }
+			.browser-tools { align-items: stretch; flex-direction: column; gap: 12px; }
+			.locus-form { align-items: end; }
+			.locus-field { flex: 1; min-width: 0; }
+			.locus-field input { width: 100%; }
+			.browser-shell, #igv-browser { min-height: 540px; }
+		}
+	</style>
+	<script src="https://cdn.jsdelivr.net/npm/igv@3.5.0/dist/igv.min.js"></script>
+</head>
+<body>
+	<div class="site-bar">
+		<a class="site-name" href="index.html">Silphium Base</a>
+		<a class="site-home" href="index.html">Home</a>
+	</div>
+
+	<main>
+		<header class="page-heading">
+			<p class="eyebrow">Local reference browser · Silphium</p>
+			<h1>Silphium</h1>
+			<p>Browse the supplied reference sequence and gene annotations. Search by chromosome and coordinate, or use IGV’s built-in navigation.</p>
+		</header>
+
+		<div class="browser-tools">
+			<h2>Genome view</h2>
+			<form class="locus-form" id="locus-form">
+				<div class="locus-field">
+					<label for="locus">Go to chromosome or locus</label>
+					<input id="locus" name="locus" type="text" value="Chr01:218000-223000" placeholder="Chr01:100000-150000">
+				</div>
+				<button type="submit">Go</button>
+			</form>
+		</div>
+
+		<section class="browser-shell" aria-label="Interactive genome browser">
+			<div id="igv-browser"></div>
+			<p id="browser-status" role="status" aria-live="polite">Loading the reference and gene track…</p>
+		</section>
+
+		<div class="data-sources">
+			<span>Reference: <a href="data/genome.fasta.gz" download>genome.fasta.gz</a></span>
+			<span>Gene annotations: <a href="data/sorted.gff3.gz" download>sorted.gff3.gz</a></span>
+		</div>
+	</main>
+
+	<script>
+		const statusElement = document.getElementById('browser-status');
+		const locusForm = document.getElementById('locus-form');
+		let browser;
+
+		function setStatus(message, state = 'ready') {
+			statusElement.textContent = message;
+			statusElement.dataset.state = state;
+		}
+
+		async function initializeBrowser() {
+			try {
+				if (!window.igv) {
+					throw new Error('IGV.js could not load. Check your internet connection and reload this page.');
+				}
+
+				browser = await igv.createBrowser(document.getElementById('igv-browser'), {
+					reference: {
+						id: 'Silphium',
+						name: 'Silphium',
+						fastaURL: 'data/genome.fasta.gz',
+						indexURL: 'data/genome.fasta.gz.fai',
+						compressedIndexURL: 'data/genome.fasta.gz.gzi'
+					},
+					locus: 'Chr01:218000-223000',
+					showNavigation: true,
+					showRuler: true,
+					tracks: [{
+						name: 'Genes',
+						type: 'annotation',
+						format: 'gff3',
+						url: 'data/sorted.gff3.gz',
+						indexURL: 'data/sorted.gff3.gz.csi',
+						displayMode: 'EXPANDED',
+						visibilityWindow: 1000000
+					}]
+				});
+
+				const mobileToolbarStyles = document.createElement('style');
+				mobileToolbarStyles.textContent = `
+					@media (max-width: 700px) {
+						.igv-navbar { width: 100% !important; min-width: 0 !important; }
+						.igv-current-genome,
+						.igv-locus-size-group,
+						.igv-navbar-toggle-button-container { display: none !important; }
+						.igv-navbar-left-container { width: auto !important; min-width: 0 !important; flex: 1 1 auto !important; }
+						.igv-navbar-genomic-location { width: 180px !important; min-width: 0 !important; flex: 0 1 180px !important; }
+						.igv-chromosome-select-widget-container { width: 100% !important; min-width: 0 !important; }
+						.igv-chromosome-select-widget-container select { width: 100% !important; max-width: 180px !important; }
+						.igv-navbar-right-container { width: 48px !important; min-width: 48px !important; flex: 0 0 48px !important; }
+					}
+				`;
+				document.getElementById('igv-browser').shadowRoot.append(mobileToolbarStyles);
+
+				setStatus('Ready · Silphium reference · gene annotations from the supplied GFF3.');
+			} catch (error) {
+				setStatus(error.message || 'The genome browser could not be initialized.', 'error');
+				console.error('Genome browser initialization failed:', error);
+			}
+		}
+
+		locusForm.addEventListener('submit', async (event) => {
+			event.preventDefault();
+			const locus = document.getElementById('locus').value.trim();
+			if (!browser || !locus) return;
+
+			try {
+				await browser.search(locus);
+				setStatus(`Showing ${locus}`);
+			} catch (error) {
+				setStatus(`Could not navigate to “${locus}”. Check the chromosome name and coordinates.`, 'error');
+			}
+		});
+
+		initializeBrowser();
+	</script>
+</body>
+</html>

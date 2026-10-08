@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<!--
+	Main page
+
+-->
+<html>
+	<head>
+		<title>SilphiumBase</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content="Genomic resources, datasets, literature, and genome browsing for Silphium." />
+		<link href="https://fonts.googleapis.com/css?family=Roboto:400,100,300,700,500,900" rel="stylesheet" type="text/css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/skel-panels.min.js"></script>
+		<script src="js/init.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+		<link rel="stylesheet" href="css/silphium-home.css">
+		<!--Favicons-->
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+		<link rel="manifest" href="/site.webmanifest">
+
+		<noscript>
+			<link rel="stylesheet" href="css/skel-noscript.css" />
+			<link rel="stylesheet" href="css/style.css" />
+			<link rel="stylesheet" href="css/style-desktop.css" />
+		</noscript>
+	</head>
+	<body>
+
+	<!-- Header -->
+		<div id="header">
+			<div id="nav-wrapper">
+				<!-- Nav -->
+				<nav id="nav">
+
+					<ul>
+						<li><a href="#genome-tools">Genome browser</a></li>
+						<li><a href="#datasets">Datasets</a></li>
+						<li><a href="#literature">Literature</a></li>
+					</ul>
+				</nav>
+			</div>
+			<div class="container">
+
+				<!-- Logo -->
+				<div id="logo">
+					<h1><a href="#genome-tools">SilphiumBase</a></h1>
+					<span class="tag">Genomic resources for a novel perennial oilseed crop</span>
+				</div>
+			</div>
+		</div>
+	<!-- Header -->
+
+	<!-- Main -->
+		<div id="main">
+			<main id="content" class="container">
+				<header class="page-intro">
+					<p class="eyebrow">A living library of plant genomics</p>
+					<h2>Explore the Silphium genome</h2>
+					<p>Reference genomes, population datasets, and research that support the study and domestication of this perennial oilseed crop.</p>
+				</header>
+
+				<section id="genome-tools" class="home-section" aria-labelledby="genome-tools-title">
+					<div class="section-heading">
+						<p class="eyebrow">01 / Explore</p>
+						<h2 id="genome-tools-title">Genome browser</h2>
+					</div>
+					<div class="tool-grid">
+						<a class="tool-link tool-link-primary" href="genome_browser_local.html">
+							<span class="tool-kicker">LOCAL TEST DATA</span>
+							<h3>Browse the genome</h3>
+							<p>Explore the Silphium reference and gene annotations currently in the data folder.</p>
+							<span class="tool-action">Open genome browser <span aria-hidden="true">&#8594;</span></span>
+						</a>
+					</div>
+				</section>
+
+				<section id="datasets" class="home-section" aria-labelledby="datasets-title">
+					<div class="section-heading">
+						<p class="eyebrow">02 / Download</p>
+						<h2 id="datasets-title">Sequencing datasets</h2>
+					</div>
+					<article class="dataset-row">
+						<span class="dataset-number">01</span>
+						<div>
+							<h3>Genome assembly</h3>
+							<p>PacBio HiFi, Omni-C, and Illumina short-read data for genome assembly <span class="dataset-size">536 Gb</span></p>
+						</div>
+						<a class="dataset-link" href="https://dataview.ncbi.nlm.nih.gov/object/PRJNA1417267">PRJNA1417267 <span aria-hidden="true">&#8599;</span></a>
+					</article>
+					<article class="dataset-row">
+						<span class="dataset-number">02</span>
+						<div>
+							<h3>Population skim-seq</h3>
+							<p>1X skim-seq for 258 accessions used in genetic diversity and GWAS studies <span class="dataset-size">2,394 Gb</span></p>
+						</div>
+						<a class="dataset-link" href="https://dataview.ncbi.nlm.nih.gov/object/PRJNA1426741">PRJNA1426741 <span aria-hidden="true">&#8599;</span></a>
+					</article>
+					<article class="dataset-row">
+						<span class="dataset-number">03</span>
+						<div>
+							<h3>Target-seq panel</h3>
+							<p>50,000 loci across 258 accessions and 49 phylogenetic samples <span class="dataset-size">1,203 Gb</span></p>
+						</div>
+						<a class="dataset-link" href="https://dataview.ncbi.nlm.nih.gov/object/PRJNA1426744">PRJNA1426744 <span aria-hidden="true">&#8599;</span></a>
+					</article>
+				</section>
+
+				<section id="literature" class="home-section literature-section" aria-labelledby="literature-title">
+					<div class="section-heading">
+						<p class="eyebrow">03 / Read</p>
+						<h2 id="literature-title">Research and context</h2>
+					</div>
+					<article class="literature-row">
+						<div>
+							<h3><a href="https://www.nature.com/articles/s41467-026-75205-3">Assembly of Silphium interspecific hybrid genomes opens the genus to phylogenomics, ecogenomics, and molecular breeding</a></h3>
+							<p>Genome sequence and annotation, genetic diversity, and genome-wide association studies.</p>
+						</div>
+						<span class="literature-type">GENOME STUDY</span>
+					</article>
+					<article class="literature-row">
+						<div>
+							<h3><a href="https://doi.org/10.1016/j.isci.2025.112836">Accelerating domestication of perennial plants with genomics</a></h3>
+							<p>A framework for genomics-enabled domestication of perennial crops.</p>
+						</div>
+						<span class="literature-type">PERSPECTIVE</span>
+					</article>
+				</section>
+			</main>
+			</div>
+		</div>
+	<!-- /Main -->
+
+	<!-- Tweet -->
+		<div id="tweet">
+			<div class="container">
+
+			</div>
+		</div>
+	<!-- /Tweet -->
+
+	<!-- Footer -->
+		<div id="footer">
+			<div class="container">
+				<section>
+					<header>
+					</header>
+				</section>
+			</div>
+		</div>
+	<!-- /Footer -->
+
+	<!-- Copyright -->
+		<div id="copyright">
+			<div class="container">
+			</div>
+		</div>
+
+	</body>
+</html>
