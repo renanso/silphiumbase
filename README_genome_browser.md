@@ -1,11 +1,20 @@
-# Local Silphium genome browser
+# Silphium genome browser
 
-The browser page uses the reference assembly and gene annotation in `data/`:
+The browser loads the reference assembly and gene annotation from the public Google Cloud Storage bucket `gs://silphiumbase`. Keep these five objects at the bucket root:
 
 - `genome.fasta.gz`, `genome.fasta.gz.fai`, and `genome.fasta.gz.gzi`
-- `sorted.gff3.gz` and its CSI index, `sorted.gff3.gz.csi`
+- `sorted.gff3.gz` and `sorted.gff3.gz.csi`
 
-Serve the workspace over HTTP so IGV.js can fetch the local files. From the project directory, run:
+The objects must allow anonymous reads and byte-range requests. The browser also needs CORS access from the website origin. Apply the CORS policy in [`gcs-cors.json`](./gcs-cors.json) with:
+
+```sh
+gcloud auth login
+gcloud storage buckets update gs://silphiumbase --cors-file=gcs-cors.json
+```
+
+Use an account with permission to update the bucket. This replaces its existing CORS policy; merge these origins and response headers into any policy you need to keep. Add your own site origin to the JSON if the site uses a custom domain. Public object access is separate from CORS and must be enabled for the browser to fetch the data.
+
+To run the site locally, start a web server from the project directory:
 
 ```sh
 python3 -m http.server 8000

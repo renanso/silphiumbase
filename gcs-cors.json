@@ -1,0 +1,22 @@
+[
+  {
+    "origin": [
+      "https://renanso.github.io",
+      "http://localhost:8000"
+    ],
+    "method": [
+      "GET",
+      "HEAD"
+    ],
+    "responseHeader": [
+      "Accept-Ranges",
+      "Content-Encoding",
+      "Content-Length",
+      "Content-Range",
+      "Content-Type",
+      "ETag",
+      "Last-Modified"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Browse the Silphium reference genome and gene annotations supplied in the local data folder.">
+	<meta name="description" content="Browse the Silphium reference genome and gene annotations hosted in Google Cloud Storage.">
 	<title>Silphium Genome Browser | Silphium Base</title>
 	<link rel="preconnect" href="https://cdn.jsdelivr.net">
 	<style>
@@ -220,7 +220,7 @@
 
 	<main>
 		<header class="page-heading">
-			<p class="eyebrow">Local reference browser · Silphium</p>
+			<p class="eyebrow">Reference browser · Silphium</p>
 			<h1>Silphium</h1>
 			<p>Browse the supplied reference sequence and gene annotations. Search by chromosome and coordinate, or use IGV’s built-in navigation.</p>
 		</header>
@@ -242,15 +242,39 @@
 		</section>
 
 		<div class="data-sources">
-			<span>Reference: <a href="data/genome.fasta.gz" download>genome.fasta.gz</a></span>
-			<span>Gene annotations: <a href="data/sorted.gff3.gz" download>sorted.gff3.gz</a></span>
+			<span>Reference: <a href="https://storage.googleapis.com/silphiumbase/genome.fasta.gz" target="_blank" rel="noopener">genome.fasta.gz</a></span>
+			<span>Gene annotations: <a href="https://storage.googleapis.com/silphiumbase/sorted.gff3.gz" target="_blank" rel="noopener">sorted.gff3.gz</a></span>
 		</div>
 	</main>
 
 	<script>
+		const DATA_BASE_URL = 'https://storage.googleapis.com/silphiumbase';
 		const statusElement = document.getElementById('browser-status');
 		const locusForm = document.getElementById('locus-form');
 		let browser;
+
+		function dataUrl(filename) {
+			return `${DATA_BASE_URL}/${filename}`;
+		}
+
+		async function verifyDataAccess() {
+			await Promise.all([
+				'genome.fasta.gz',
+				'genome.fasta.gz.fai',
+				'genome.fasta.gz.gzi',
+				'sorted.gff3.gz',
+				'sorted.gff3.gz.csi'
+			].map(async (filename) => {
+				const response = await fetch(dataUrl(filename), {
+					headers: { Range: 'bytes=0-0' }
+				});
+				const supportsRanges = response.status === 206;
+				await response.body?.cancel();
+				if (!response.ok || !supportsRanges) {
+					throw new Error(`Could not read ${filename} as a byte-range request (HTTP ${response.status}).`);
+				}
+			}));
+		}
 
 		function setStatus(message, state = 'ready') {
 			statusElement.textContent = message;
@@ -263,13 +287,14 @@
 					throw new Error('IGV.js could not load. Check your internet connection and reload this page.');
 				}
 
+				await verifyDataAccess();
 				browser = await igv.createBrowser(document.getElementById('igv-browser'), {
 					reference: {
 						id: 'Silphium',
 						name: 'Silphium',
-						fastaURL: 'data/genome.fasta.gz',
-						indexURL: 'data/genome.fasta.gz.fai',
-						compressedIndexURL: 'data/genome.fasta.gz.gzi'
+						fastaURL: dataUrl('genome.fasta.gz'),
+						indexURL: dataUrl('genome.fasta.gz.fai'),
+						compressedIndexURL: dataUrl('genome.fasta.gz.gzi')
 					},
 					locus: 'Chr01:218000-223000',
 					showNavigation: true,
@@ -278,8 +303,8 @@
 						name: 'Genes',
 						type: 'annotation',
 						format: 'gff3',
-						url: 'data/sorted.gff3.gz',
-						indexURL: 'data/sorted.gff3.gz.csi',
+						url: dataUrl('sorted.gff3.gz'),
+						indexURL: dataUrl('sorted.gff3.gz.csi'),
 						displayMode: 'EXPANDED',
 						visibilityWindow: 1000000
 					}]
@@ -303,7 +328,8 @@
 
 				setStatus('Ready · Silphium reference · gene annotations from the supplied GFF3.');
 			} catch (error) {
-				setStatus(error.message || 'The genome browser could not be initialized.', 'error');
+				const message = error.message || 'The genome browser could not be initialized.';
+				setStatus(`Genome data could not be loaded (${message}). Confirm anonymous read access, byte-range support, and CORS for this site; see README_genome_browser.md.`, 'error');
 				console.error('Genome browser initialization failed:', error);
 			}
 		}
