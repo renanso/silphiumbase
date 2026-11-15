@@ -243,7 +243,7 @@
 
 		<div class="data-sources">
 			<span>Reference: <a href="https://storage.googleapis.com/silphiumbase/genome.fasta.gz" target="_blank" rel="noopener">genome.fasta.gz</a></span>
-			<span>Gene annotations: <a href="https://storage.googleapis.com/silphiumbase/sorted.gff3.gz" target="_blank" rel="noopener">sorted.gff3.gz</a></span>
+			<span>Gene annotations: <a href="https://storage.googleapis.com/silphiumbase/annotated.gff3.gz" target="_blank" rel="noopener">annotated.gff3.gz</a></span>
 		</div>
 	</main>
 
@@ -262,8 +262,8 @@
 				'genome.fasta.gz',
 				'genome.fasta.gz.fai',
 				'genome.fasta.gz.gzi',
-				'sorted.gff3.gz',
-				'sorted.gff3.gz.csi'
+				'annotated.gff3.gz',
+				'annotated.gff3.gz.csi'
 			].map(async (filename) => {
 				const response = await fetch(dataUrl(filename), {
 					headers: { Range: 'bytes=0-0' }
@@ -303,8 +303,8 @@
 						name: 'Genes',
 						type: 'annotation',
 						format: 'gff3',
-						url: dataUrl('sorted.gff3.gz'),
-						indexURL: dataUrl('sorted.gff3.gz.csi'),
+						url: dataUrl('annotated.gff3.gz'),
+						indexURL: dataUrl('annotated.gff3.gz.csi'),
 						displayMode: 'EXPANDED',
 						visibilityWindow: 1000000
 					}]
@@ -326,7 +326,7 @@
 				`;
 				document.getElementById('igv-browser').shadowRoot.append(mobileToolbarStyles);
 
-				setStatus('Ready · Silphium reference · gene annotations from the supplied GFF3.');
+				setStatus('');
 			} catch (error) {
 				const message = error.message || 'The genome browser could not be initialized.';
 				setStatus(`Genome data could not be loaded (${message}). Confirm anonymous read access, byte-range support, and CORS for this site; see README_genome_browser.md.`, 'error');
